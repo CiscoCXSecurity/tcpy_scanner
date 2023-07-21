@@ -33,3 +33,42 @@ options:
   -B BLOCKLIST, --blocklist BLOCKLIST
                         List of blacklisted ips. Useful on windows to blocklist network addresses. Separate with commas: 127.0.0.0,192.168.0.0. Default None
 ```
+## Examples
+Scan all ports on a host:
+```
+tcpy_scanner.py 10.0.0.1 # defaults to -p 1-65535
+tcpy_scanner.py -p 1-65535 10.0.0.1 # same thing
+```
+
+Scan selected ports on a network:
+```
+tcpy_scanner.py -p 22,445,3389 10.0.0.0/24
+```
+
+Scan faster by by reducing retries from 2 (default) to 0:
+```
+tcpy_scanner.py -r 0 -p 22,445,3389 10.0.0.0/24
+```
+
+Scan even faster by increasing bandwidth limit (default 250kbit/sec):
+```
+tcpy_scanner.py -b 1m -r 0 -p 22,445,3389 10.0.0.0/24
+```
+
+Allow use of more open sockets to make your scans go faster (Linux only):
+```
+$ cat /proc/self/limits 
+Limit                     Soft Limit           Hard Limit           Units     
+...
+Max open files            1024                 1048576              files     
+...
+$ ulimit -n 1048576
+```
+
+Avoid errors relating to scanning the network address (10.0.0.0 in this example) on windows:
+```
+tcpy_scanner.py -p 22,445,3389 -B 10.0.0.0 10.0.0.0/24
+```
+
+
+
