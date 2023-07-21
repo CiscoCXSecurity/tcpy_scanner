@@ -74,7 +74,7 @@ tcpy_scanner.py -p 22,445,3389 -B 10.0.0.0 10.0.0.0/24
 
 There are some inherent limitations (unrelated to tcpy_scanner) to scanning locally attached networks as a non-root user.  One of this is that Linux effectively rate-limits ARP resolutions.
 
-If your targets are on a locally attached ethernet network (i.e. packets don't go through a router), the kernel needs to find the MAC address of each target using [ARP](https://en.wikipedia.org/wiki/Address_Resolution_Protocol).  The linux kernel can perform up to a 1024 ARP resolutions in parallel (distro may differ).  The setting governing this limit is [gc_thresh3](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt):
+If your targets are on a locally attached ethernet network (i.e. packets don't go through a router), the kernel needs to find the MAC address of each target using [ARP](https://en.wikipedia.org/wiki/Address_Resolution_Protocol).  The linux kernel can perform up to a 1024 ARP resolutions in parallel (distros may differ).  The setting governing this limit is [gc_thresh3](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt):
 
 ```
 neigh/default/gc_thresh3 - INTEGER
