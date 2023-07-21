@@ -70,9 +70,9 @@ Avoid errors relating to scanning the network address (10.0.0.0 in this example)
 tcpy_scanner.py -p 22,445,3389 -B 10.0.0.0 10.0.0.0/24
 ```
 
-## Limitations of scanning locally attached networks as a non-root user
+## Limitations of scanning large locally attached networks as a non-root user
 
-There are some inherent limitations (unrelated to tcpy_scanner) to scanning locally attached networks as a non-root user.  One of this is that Linux effectively rate-limits ARP resolutions.
+There are some inherent limitations (unrelated to tcpy_scanner) to scanning large locally attached networks as a non-root user.  One of this is that Linux effectively rate-limits ARP resolutions.  Here "large" means >1024 IPs.
 
 If your targets are on a locally attached ethernet network (i.e. packets don't go through a router), the kernel needs to find the MAC address of each target using [ARP](https://en.wikipedia.org/wiki/Address_Resolution_Protocol).  The linux kernel can perform up to a 1024 ARP resolutions in parallel (distros may differ).  The setting governing this limit is [gc_thresh3](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt):
 
@@ -87,15 +87,15 @@ A failed ARP resolution will typically take 3 seconds (during my testing): 3 ARP
 
 This means that at best, you can hope to scan at 341 (1024/3) hosts per second.  So scanning at 341 packets per second should be reliable - even if all these packets go do different hosts.
 
-But 341 packets/second may be too slow for some use cases.
+But 341 packets/second may be too slow for some use-cases.
 
-A good workaround is to do an ARP scan first to identify target hosts; then only scan those hosts.  e.g. if you have a /24 network and your ARP scan shows you only have 10 hosts on the network, only port scan those 10 hosts.
+A good workaround is to do an ARP scan first to identify target hosts; then only scan those hosts.  e.g. if you have a /20 network (4096 IPs) and your ARP scan shows you only have 10 hosts on the network, only port scan those 10 hosts.
 
-If we were root, we could use (arp-scan)[https://www.kali.org/tools/arp-scan/).  This would be a great solution as it crafts packets and therefor bypasses the rate limit outlined above...  But as we've resorted to port-scanning with python, we're probably not root.  
+If we were root, we could use (arp-scan)[https://www.kali.org/tools/arp-scan/).  This would be a great solution as it crafts packets and therefore bypasses the rate limit outlined above...  But as we've resorted to port-scanning with python, we're probably not root, so we need another solution. 
 
-Here's how we can do a crude ARP scan using tcpy_scanner.  We'll scan 1 port on the whole local subnet, then immediately inspect the ARP cache to note live hosts:
+Here's how we can do a crude ARP scan using tcpy_scanner.  We'll scan 1 TCP port on the whole local subnet (just to trigger the ARP lookup), then immediately inspect the ARP cache to note live hosts:
 ```
-$ ifconfig -a # and note details of your locally attached network - 10.0.0.0/22 in this case (1024 IPs)
+$ ifconfig -a # and note details of your locally attached network - 10.0.0.0/20 in this case (4096 IPs)
 $ tcpy_scanner.py -r0 -p 80 -P 300 10.0.0.0/22; arp -an > arp-cache-snapshot.txt 
 ```
 When the scan finishes, you'll save a snapshot of your ARP cache in arp-cache-snapshot.txt.  Extract your target hosts from this and port-scan as normal.
