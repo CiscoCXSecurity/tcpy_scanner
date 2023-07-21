@@ -70,5 +70,34 @@ Avoid errors relating to scanning the network address (10.0.0.0 in this example)
 tcpy_scanner.py -p 22,445,3389 -B 10.0.0.0 10.0.0.0/24
 ```
 
+## Limitations with scanning locally attached networks
+
+There are some inherent limitations (unrelated to tcpy_scanner) to scanning locally attached networks as a non-root user.  One of this is that Linux effectively rate-limits ARP resolutions.
+
+If your targets are on a locally attached ethernet network (i.e. packets don't go through a router), the kernel needs to find the MAC address of each target using [ARP](https://en.wikipedia.org/wiki/Address_Resolution_Protocol).  The linux kernel can perform up to a 1024 ARP resolutions in parallel (distro may differ).  The setting governing this limit is [gc_thresh3](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt):
+
+```
+neigh/default/gc_thresh3 - INTEGER
+	Maximum number of non-PERMANENT neighbor entries allowed.  Increase
+	this when using large numbers of interfaces and when communicating
+	with large numbers of directly-connected peers.
+	Default: 1024
+ ```
+A failed ARP resolution will typically take 3 seconds (during my testing): 3 ARP who-has requests, 1 second apart.
+
+This means that at best, you can hope to scan at 341 (1024/3) hosts per second.  So scanning at 341 packets per second should be reliable - even if all these packets go do different hosts.
+
+But 341 packets/second may be too slow for some use cases.
+
+A good workaround is to do an ARP scan first to identify target hosts; then only scan those hosts.  e.g. if you have a /24 network and your ARP scan shows you only have 10 hosts on the network, only port scan those 10 hosts.
+
+If we were root, we could use (arp-scan)[https://www.kali.org/tools/arp-scan/).  This would be a great solution as it crafts packets and therefor bypasses the rate limit outlined above...  But as we've resorted to port-scanning with python, we're probably not root.  
+
+Here's how we can do a crude ARP scan using tcpy_scanner.  We'll scan 1 port on the whole local subnet, then immediately inspect the ARP cache to note live hosts:
+```
+$ ifconfig -a # and note details of your locally attached network - 10.0.0.0/22 in this case (1024 IPs)
+$ tcpy_scanner.py -r0 -p 80 -P 300 10.0.0.0/22; arp -an > arp-cache-snapshot.txt 
+```
+When the scan finishes, you'll save a snapshot of your ARP cache in arp-cache-snapshot.txt.  Extract your target hosts from this and port-scan as normal.
 
 
