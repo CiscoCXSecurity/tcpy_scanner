@@ -70,7 +70,7 @@ Avoid errors relating to scanning the network address (10.0.0.0 in this example)
 tcpy_scanner.py -p 22,445,3389 -B 10.0.0.0 10.0.0.0/24
 ```
 
-## Limitations with scanning locally attached networks as a non-root user
+## Limitations of scanning locally attached networks as a non-root user
 
 There are some inherent limitations (unrelated to tcpy_scanner) to scanning locally attached networks as a non-root user.  One of this is that Linux effectively rate-limits ARP resolutions.
 
