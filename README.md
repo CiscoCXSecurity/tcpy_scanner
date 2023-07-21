@@ -54,7 +54,6 @@ Scan even faster by increasing bandwidth limit (default 250kbit/sec):
 ```
 tcpy_scanner.py -b 1m -r 0 -p 22,445,3389 10.0.0.0/24
 ```
-
 Allow use of more open sockets to make your scans go faster (Linux only):
 ```
 $ cat /proc/self/limits 
@@ -64,11 +63,17 @@ Max open files            1024                 1048576              files
 ...
 $ ulimit -n 1048576
 ```
-
 Avoid errors relating to scanning the network address (10.0.0.0 in this example) on windows:
 ```
 tcpy_scanner.py -p 22,445,3389 -B 10.0.0.0 10.0.0.0/24
 ```
+## Python on Windows?
+
+During pentests I've found python is rarely installed.  So you'd need to use something like (pyinstaller)[https://pyinstaller.org/en/stable/usage.html] to create an exe from this python script.
+
+## Limitation of closed port detection from Windows
+
+The -c option is ignored on Windows.  This is because it (isn't possible to detect closed ports)[https://stackoverflow.com/questions/63676682/windows-sockets-how-to-immediately-detect-tcp-rst-on-nonblocking-connect] from windows using standard TCP libraries.  If you had administrator rights and could install (npcap)[https://npcap.com/], you could.  But our use-case is that we're pivotting with non-admin privileges.
 
 ## Limitations of scanning large locally attached networks as a non-root user
 
