@@ -96,9 +96,9 @@ Limits on the bandwidth used and packets per second are described below.  Howeve
 
 tcpy_scanner is designed to be able to scan large numbers of hosts - hundreds of thousands or even millions of hosts.
 
-It will scan a Class B network with one probe with no retries in about 95 seconds (for a small probe size):
+It can scan a Class B network with no retries in about 39 seconds (this is a non-local network - local networks need to be scanned more slowly, see below:
 ```
-tcpy_scanner.py -p 80 -r 0 127.0.0.1/16
+python3 tcpy_scanner.py -p 80 -r 0 -b 1m 10.99.0.0/16
 ```
 ### Safety
 
