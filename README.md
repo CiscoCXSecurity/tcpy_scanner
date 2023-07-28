@@ -82,7 +82,7 @@ On the one hand it's really easy to write a TCP connect port scanner.  Just a fe
 * It can send exactly the number of retries I want.  No more.  No less.
 * I can use the scanner from a pivot without super user privs.
 
-I want to write a scanner that hides some of the (hideous) complexities of OS quirks and limitations and uses good defaults to get the job done.  As I say, this can be a bit complex.  Feel free to (contribute)[CONTRIBUTING.md] if you find bugs.
+I want to write a scanner that hides some of the (hideous) complexities of OS quirks and limitations and uses good defaults to get the job done.  As I say, this can be a bit complex.  Feel free to [contribute](CONTRIBUTING.md) if you find bugs.
 
 ### Speed
 
@@ -148,9 +148,9 @@ Aside from the usual risks of scanning, the code was written around July 2023, s
 
 ## Credits
 
-Some of the code base is shared with (tcpy_scanner)[https://github.com/CiscoCXSecurity/udp-proto-scanner].
+Some of the code base is shared with [tcpy_scanner](https://github.com/CiscoCXSecurity/udp-proto-scanner])
 Inspiration for the scanning code was drawn from ike-scan.
-The code base conclude a list of popular ports derived from a GPLv2 compatible version of (nmap)[https://nmap.org/].
+The code base conclude a list of popular ports derived from a GPLv2 compatible version of [nmap](https://nmap.org/).
 
 ## Limitations
 
