@@ -156,11 +156,11 @@ The code base conclude a list of popular ports derived from a GPLv2 compatible v
 
 ### Python on Windows?
 
-During pentests I've found python is rarely installed.  So you'd need to use something like (pyinstaller)[https://pyinstaller.org/en/stable/usage.html] to create an exe from this python script.
+During pentests I've found python is rarely installed.  So you'd need to use something like [pyinstaller](https://pyinstaller.org/en/stable/usage.html) to create an exe from this python script.
 
 ### Limitation of closed port detection from Windows
 
-The -c option is ignored on Windows.  This is because it (isn't possible to detect closed ports)[https://stackoverflow.com/questions/63676682/windows-sockets-how-to-immediately-detect-tcp-rst-on-nonblocking-connect] from windows using standard TCP libraries.  If you had administrator rights and could install (npcap)[https://npcap.com/], you could.  But our use-case is that we're pivotting with non-admin privileges.
+The -c option is ignored on Windows.  This is because it [isn't possible to detect closed ports](https://stackoverflow.com/questions/63676682/windows-sockets-how-to-immediately-detect-tcp-rst-on-nonblocking-connect) from windows using standard TCP libraries.  If you had administrator rights and could install [npcap](https://npcap.com/), you could.  But our use-case is that we're pivotting with non-admin privileges.
 
 ### Limitation of scanning speed on Windows
 
