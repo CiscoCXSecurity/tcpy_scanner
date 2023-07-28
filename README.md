@@ -187,7 +187,7 @@ But 341 packets/second may be too slow for some use-cases.
 
 A good workaround is to do an ARP scan first to identify target hosts; then only scan those hosts.  e.g. if you have a /20 network (4096 IPs) and your ARP scan shows you only have 10 hosts on the network, only port scan those 10 hosts.
 
-If we were root, we could use (arp-scan)[https://www.kali.org/tools/arp-scan/).  This would be a great solution as it crafts packets and therefore bypasses the rate limit outlined above...  But as we've resorted to port-scanning with python, we're probably not root, so we need another solution. 
+If we were root, we could use [arp-scan](https://www.kali.org/tools/arp-scan/).  This would be a great solution as it crafts packets and therefore bypasses the rate limit outlined above...  But as we've resorted to port-scanning with python, we're probably not root, so we need another solution. 
 
 Here's how we can do a crude ARP scan using tcpy_scanner.  We'll scan 1 TCP port on the whole local subnet (just to trigger the ARP lookup), then immediately inspect the ARP cache to note live hosts:
 ```
