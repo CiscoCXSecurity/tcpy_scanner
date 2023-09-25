@@ -988,9 +988,11 @@ class ScannerTCP(ScannerBase):
                                 try:
                                     sock.connect((ps.target_ip, ps.target_port))
 
-                                # BlockingIOError: [Errno 115] Operation now in progress (this is expected / desired)
+                                # These are expected / desired:
+                                # BlockingIOError: [Errno 115] Operation now in progress 
+                                # BlockingIOError: [Errno 10035] A non-blocking socket operation could not be completed immediately.
                                 except BlockingIOError as e:  # not available in python2
-                                    if e.errno == 115:
+                                    if e.errno == 115 or e.errno == 10035:
                                         sent = True
                                     else:
                                         raise e
@@ -1301,7 +1303,7 @@ def hex_encode(hex_bytes):
     return hex_bytes.hex()
 
 if __name__ == "__main__":
-    VERSION = "1.0"
+    VERSION = "1.1"
 
     # Defaults
     DEFAULT_MAX_PROBES = 2
